@@ -1,74 +1,69 @@
-﻿# 🔐 Blueprint Crypto Challenge
+# Blueprint Crypto Challenge
 
-A full-stack RSA encryption and decryption service with searchable, persistent logs — built for SecureLog’s Developer Challenge.
+A full stack RSA encryption and decryption service with persistent, searchable logs.  
+Built as a submission for SecureLog’s Blueprint Developer Challenge.
 
-Live Demo: [https://blueprint-crypto.netlify.app](https://blueprint-crypto.netlify.app)
+**Live demo:** https://blueprint-crypto.netlify.app
 
 ---
 
-## 🧩 Overview
+## Overview
 
-**Blueprint Crypto** is a modernized encryption platform built using:
+**Blueprint Crypto** is a small but complete encryption platform designed to demonstrate secure API design, real world persistence, and clean frontend and backend integration.
 
-- ⚛️ **React + Vite + TypeScript** (frontend)
-- ⚙️ **Node.js (Netlify Functions)** backend using native **crypto**
-- 🗄️ **PostgreSQL** (Neon Cloud) for logs
-- 🐳 **Docker Compose** for local orchestration
-- 🤖 **GitHub Actions (Ruff + ESLint)** for automated lint checks
-
-The app allows users to:
-- Encrypt data using an RSA **public key**
-- Decrypt ciphertext using the corresponding **private key**
+At a high level, the app allows users to:
+- Encrypt plaintext using an RSA public key
+- Decrypt ciphertext using the corresponding private key
 - View, paginate, and clear request logs stored in PostgreSQL
-- See real-time API health status
-- Enjoy a neon green cyber-styled UI
+- Check real time API health
+- Interact with a clean, cyber styled user interface
+
+The focus of this project was not just encryption, but building a realistic system around it with logging, observability, and deployment best practices.
 
 ---
 
-☁️ Production (Netlify + Neon)
+## Tech stack
 
-Deployed URLs:
+**Frontend**
+- React with Vite and TypeScript
+- Deployed on Netlify
 
-Frontend: https://blueprint-crypto.netlify.app
+**Backend**
+- Node.js serverless functions via Netlify Functions
+- Uses Node’s native `crypto` module for RSA encryption and decryption
 
-API (Functions): /api/v1/*
+**Database**
+- PostgreSQL hosted on Neon Cloud
+- Stores persistent, searchable request logs
 
-Database: Neon-hosted PostgreSQL
+**Dev and tooling**
+- Docker Compose for local development
+- GitHub Actions for automated linting
+- ESLint for frontend checks
+- Ruff for backend checks
 
-⚙️ Local Development
-Prerequisites
+---
 
-Docker Desktop
+## Production setup
 
-Node.js 20+
+**Frontend**
+- Hosted on Netlify  
+- URL: https://blueprint-crypto.netlify.app
 
-Python 3.12+ (for key generation tests)
+**API**
+- Exposed via Netlify Functions  
+- Routes available under `/api/v1/*`
 
-1️⃣ Run locally with Docker
-# from project root
-docker compose up --build
+**Database**
+- Neon hosted PostgreSQL
+- Connected securely via environment variables
 
+The frontend communicates with the backend through Netlify’s serverless proxy, keeping API paths stable and simple.
 
-React app → http://localhost:5173
+---
 
-FastAPI (or Netlify-style API dev server) → http://localhost:8000
-
-PostgreSQL DB → localhost:5432
-
-2️⃣ Run frontend manually
-cd web
-npm install
-npm run dev
-
-3️⃣ Backend (FastAPI/Netlify local emulation)
-cd server
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-
-🧱 Repository Structure
-📦 blueprint-crypto
+**Repository Structure**
+blueprint-crypto
 ├── .github/
 │   └── workflows/
 │       ├── web-lint.yml
@@ -86,75 +81,11 @@ uvicorn app.main:app --reload
 ├── docker-compose.yml
 └── README.md
 
-✅ GitHub Actions (Linting)
+---
 
-web-lint.yml → runs ESLint on the React app
-
-server-lint.yml → runs Ruff on the backend
-
-Both triggered automatically on every push or PR
-
-Author: Aryan Rawat
-Institution: Stevens Institute of Technology
-Submission: Blueprint Developer Challenge 2025
-
-Architecture Diagram:
-                          ┌──────────────────────────────────────────────┐
-                          │         🖥️ FRONTEND (React + Vite + TS)       │
-                          │----------------------------------------------│
-                          │  • Encrypt Form (RSA Public Key Input)       │
-                          │  • Decrypt Form (RSA Private Key Input)      │
-                          │  • Logs Viewer (Paginated Request Logs)      │
-                          │                                              │
-                          │  Hosted on Netlify (Vite build output)       │
-                          └───────────────┬──────────────────────────────┘
-                                          │
-                                          │ HTTPS (via Netlify Functions proxy)
-                                          ▼
-        ┌───────────────────────────────────────────────────────────────────────────┐
-        │         ☁️ BACKEND (Serverless Node.js — netlify/functions/api.mjs)        │
-        │---------------------------------------------------------------------------│
-        │  • POST /api/v1/encrypt   → Encrypt payload w/ Public Key                 │
-        │  • POST /api/v1/decrypt   → Decrypt ciphertext w/ Private Key             │
-        │  • GET  /api/v1/logs      → Paginate and fetch log history                │
-        │  • DELETE /api/v1/logs    → Clear logs                                    │
-        │                                                                   🔐      │
-        │  Uses Node’s native crypto (RSA-OAEP/SHA-256)                             │
-        │  Connected via env vars: DATABASE_URL, VITE_API_BASE, NODE_VERSION        │
-        └──────────────────────┬────────────────────────────────────────────────────┘
-                               │
-                               │ SQL (TLS)
-                               ▼
-                  ┌─────────────────────────────────────────────┐
-                  │     🗄️ DATABASE (PostgreSQL via Neon Cloud)  │
-                  │---------------------------------------------│
-                  │  • Table: logs                              │
-                  │      - id (UUID, PK)                        │
-                  │      - timestamp (UNIX)                     │
-                  │      - ip                                   │
-                  │      - data (event summary)                 │
-                  │---------------------------------------------│
-                  │  Persistent, searchable request history     │
-                  │  Accessed via pg driver from serverless API │
-                  └─────────────────────────────────────────────┘
-                               ▲
-                               │
-        ┌──────────────────────┴──────────────────────────────────────┐
-        │         🧱 LOCAL / DEV ENV (Docker Compose)                 │
-        │-------------------------------------------------------------│
-        │  • web: React Dev Server → http://localhost:5173            │
-        │  • api: FastAPI/Netlify local dev → http://localhost:8000   │
-        │  • db: PostgreSQL → localhost:5432                          │
-        │-------------------------------------------------------------│
-        │  Shared Docker network & volume for persistence             │
-        └─────────────────────────────────────────────────────────────┘
-                               ▲
-                               │ CI/CD Pipeline (GitHub Actions)
-                               │
-        ┌─────────────────────────────────────────────────────────────┐
-        │     ⚙️ AUTOMATION (GitHub Actions)                          │
-        │-------------------------------------------------------------│
-        │  • web-lint.yml   → ESLint checks (frontend)                │
-        │  • server-lint.yml → Ruff checks (backend)                  │
-        │  • Trigger: on push or PR                                   │
-        └─────────────────────────────────────────────────────────────┘
+**What I would improve with more time**
+- Add authentication and user scoped logs
+- Add request rate limiting and abuse protection
+- Add structured log filtering in the UI
+- Add unit and integration tests for crypto and database layers
+- Add key validation and formatting helpers in the frontend
