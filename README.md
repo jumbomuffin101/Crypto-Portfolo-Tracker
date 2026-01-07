@@ -1,7 +1,7 @@
 # Crypto Portfolio Tracker
 
 Live Demo:  
-https://blueprint-crypto.netlify.app
+https://crypto-portfolio-tracker-ar7.netlify.app/
 
 Crypto Portfolio Tracker is a full stack RSA encryption and decryption service built as a submission for SecureLog’s Blueprint Developer Challenge. The project demonstrates secure API design, persistent logging, and clean frontend and backend integration using a modern serverless stack.
 
