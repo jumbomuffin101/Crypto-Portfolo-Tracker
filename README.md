@@ -1,6 +1,6 @@
 # Secure Message Exchange
 
-**Live Demo:** [https://crypto-portfolio-tracker-ar7.netlify.app/](https://crypto-portfolio-tracker-ar7.netlify.app/)
+**Live Demo:** [https://secure-message-exchange.netlify.app/](https://secure-message-exchange.netlify.app/)
 
 A full-stack encrypted messaging platform demonstrating end-to-end encryption using RSA public-key cryptography. Built to understand how secure messaging systems work under the hood, with emphasis on auditability, observability, and production deployment practices.
 
@@ -160,4 +160,3 @@ npm run dev
 MIT
 
 ---
-
